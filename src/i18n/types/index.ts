@@ -51,6 +51,14 @@ export interface StringMap {
   'appearanceScreen.languagePickerModal.restartNote': 'string';
   'appearanceScreen.appLanguageDefault': 'string';
   'appearanceScreen.appTheme': 'string';
+  'appearanceScreen.ePaperApplyTitle': 'string';
+  'appearanceScreen.ePaperApplyDescription': 'string';
+  'appearanceScreen.ePaperThemeOnly': 'string';
+  'appearanceScreen.ePaperApply': 'string';
+  'appearanceScreen.ePaperLeaveTitle': 'string';
+  'appearanceScreen.ePaperLeaveDescription': 'string';
+  'appearanceScreen.ePaperKeep': 'string';
+  'appearanceScreen.ePaperRestore': 'string';
   'appearanceScreen.darkTheme': 'string';
   'appearanceScreen.dateFormat': 'string';
   'appearanceScreen.dateFormatDefault': 'string';
