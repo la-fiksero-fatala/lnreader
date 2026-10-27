@@ -56,6 +56,7 @@ export interface AppSettings {
   showLabelsInNav: boolean;
   useFabForContinueReading: boolean;
   disableLoadingAnimations: boolean;
+  reduceAppAnimations: boolean;
   dateFormat?: DateFormat;
   relativeTimestamps?: boolean;
 
@@ -261,6 +262,7 @@ const initialAppSettings: AppSettings = {
   showLabelsInNav: true,
   useFabForContinueReading: false,
   disableLoadingAnimations: false,
+  reduceAppAnimations: false,
   dateFormat: 'default',
   relativeTimestamps: true,
 

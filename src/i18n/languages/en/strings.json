@@ -420,6 +420,8 @@
     "desc": "(Descending)",
     "disableLoadingAnimations": "Disable loading animations",
     "disableLoadingAnimationsDesc": "May improve performance on slower devices",
+    "reduceAppAnimations": "Disable interface animations",
+    "reduceAppAnimationsDesc": "Stop screen transitions and motion in buttons, panels, and other controls",
     "disableHapticFeedback": "Disable haptic feedback",
     "disableHapticFeedbackDescription": "Turn off vibrations for touch interactions.",
     "chapterDownloadCooldown": "Chapter download cooldown",
