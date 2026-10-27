@@ -137,7 +137,7 @@ export default function useChapter(
           volumeUpDelta >= 0 ? '+' : '-'
         } 1);
       } else {
-        window.scrollBy({top: -${volumeButtonOffset}, behavior: 'smooth'});
+        window.scrollBy({top: -${volumeButtonOffset}, behavior: window.reader?.scrollBehavior?.() ?? 'smooth'});
       }
     })()`);
   });
@@ -150,7 +150,7 @@ export default function useChapter(
           volumeDownDelta >= 0 ? '+' : '-'
         } 1);
       } else {
-        window.scrollBy({top: ${volumeButtonOffset}, behavior: 'smooth'});
+        window.scrollBy({top: ${volumeButtonOffset}, behavior: window.reader?.scrollBehavior?.() ?? 'smooth'});
       }
     })()`);
   });
@@ -412,7 +412,7 @@ export default function useChapter(
         window.scrollBy({top:${defaultTo(
           autoScrollOffset,
           Dimensions.get('window').height,
-        )},behavior:'smooth'})
+        )},behavior:window.reader?.scrollBehavior?.() ?? 'smooth'})
       })()`);
     }, autoScrollInterval * 1000);
 
