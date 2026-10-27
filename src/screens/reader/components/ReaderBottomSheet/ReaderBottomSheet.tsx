@@ -136,6 +136,11 @@ const navigationPreferences: GeneralPreference[] = [
     label: 'tapToScroll',
     description: 'tapToScrollDescription',
   },
+  {
+    key: 'pageReaderDisableAnimation',
+    label: 'disableReaderAnimations',
+    description: 'disableReaderAnimationsDescription',
+  },
 ];
 
 const pagedModePreferences: GeneralPreference[] = [
@@ -143,11 +148,6 @@ const pagedModePreferences: GeneralPreference[] = [
     key: 'pageReaderInvertVolumeButtons',
     label: 'invertVolumeButtons',
     description: 'invertVolumeButtonsDescription',
-  },
-  {
-    key: 'pageReaderDisableAnimation',
-    label: 'disablePageTransitions',
-    description: 'disablePageTransitionsDescription',
   },
 ];
 
