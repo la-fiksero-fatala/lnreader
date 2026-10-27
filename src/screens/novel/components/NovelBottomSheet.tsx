@@ -284,7 +284,7 @@ const ChaptersSettingsSheet = ({
         <RNModal
           visible={scanlatorsModalVisible}
           transparent={true}
-          animationType="fade"
+          animationType={reduceAppAnimations ? 'none' : 'fade'}
           onRequestClose={() => setScanlatorsModalVisible(false)}
         >
           <View style={styles.modalBackdrop}>
