@@ -75,12 +75,8 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
       : colorScheme;
   const availableThemes = useMemo(() => {
     const themes = actualThemeMode === 'light' ? lightThemes : darkThemes;
-    const ePaperTheme = themes.find(item => item.id === E_PAPER_THEME_ID);
-    const featuredThemes = ePaperTheme
-      ? [ePaperTheme, ...themes.filter(item => item !== ePaperTheme)]
-      : themes;
     if (!isDynamicThemeAvailable) {
-      return featuredThemes;
+      return themes;
     }
 
     const dynamicTheme =
@@ -90,7 +86,7 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
             getSystemDynamicTheme(),
             actualThemeMode === 'dark',
           );
-    return [dynamicTheme, ...featuredThemes];
+    return [dynamicTheme, ...themes];
   }, [actualThemeMode, theme]);
 
   /**
@@ -358,19 +354,6 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
               ))}
             </ScrollView>
           </View>
-          <SettingSwitch
-            label={getString('appearanceScreen.ePaperOptimizations')}
-            description={getString(
-              'appearanceScreen.ePaperOptimizationsDescription',
-            )}
-            value={ePaperOptimizations}
-            onPress={
-              ePaperOptimizations
-                ? disableEPaperOptimizations
-                : applyEPaperOptimizations
-            }
-            theme={theme}
-          />
           {theme.isDark ? (
             <SettingSwitch
               label={getString('appearanceScreen.pureBlackDarkMode')}

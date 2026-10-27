@@ -51,8 +51,6 @@ export interface StringMap {
   'appearanceScreen.languagePickerModal.restartNote': 'string';
   'appearanceScreen.appLanguageDefault': 'string';
   'appearanceScreen.appTheme': 'string';
-  'appearanceScreen.ePaperOptimizations': 'string';
-  'appearanceScreen.ePaperOptimizationsDescription': 'string';
   'appearanceScreen.ePaperApplyTitle': 'string';
   'appearanceScreen.ePaperApplyDescription': 'string';
   'appearanceScreen.ePaperThemeOnly': 'string';

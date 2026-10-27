@@ -10,7 +10,6 @@ export const presetReaderThemes: ReaderTheme[] = [
     backgroundColor: '#000000',
     textColor: '#FFFFFFB3',
   },
-  { backgroundColor: '#000000', textColor: '#FFFFFF' },
 ];
 
 export interface Font {

@@ -54,8 +54,6 @@
     },
     "appLanguageDefault": "Default",
     "appTheme": "App theme",
-    "ePaperOptimizations": "E-paper optimizations",
-    "ePaperOptimizationsDescription": "Black-and-white reader, paged reading, page-turn buttons, and no animations",
     "ePaperApplyTitle": "Also apply E-paper optimizations?",
     "ePaperApplyDescription": "Use white pages with black text, turn on paged reading and page-turn buttons, turn off auto-scroll, and stop reader, loading, and interface animations. Your current settings will be saved.",
     "ePaperThemeOnly": "Theme only",
