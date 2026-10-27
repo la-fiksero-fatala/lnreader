@@ -428,7 +428,7 @@ describe('useChapter', () => {
     expect(result.current.chapterText).toBe('SANITIZED:next body');
   });
 
-  it('injects scripts supporting paged and normal modes when volume buttons are pressed', async () => {
+  it('routes volume and Page Up/Down keys through the paged or scrolling reader', async () => {
     const store = createStore();
     mockUseNovelActions.mockReturnValue(store.state);
     const mockInjectJavaScript = jest.fn();
@@ -451,9 +451,17 @@ describe('useChapter', () => {
     const volumeDownCall = (
       NativeVolumeButtonListener.addListener as jest.Mock
     ).mock.calls.find(([event]) => event === 'VolumeDown');
+    const pageUpCall = (
+      NativeVolumeButtonListener.addListener as jest.Mock
+    ).mock.calls.find(([event]) => event === 'PageUp');
+    const pageDownCall = (
+      NativeVolumeButtonListener.addListener as jest.Mock
+    ).mock.calls.find(([event]) => event === 'PageDown');
 
     expect(volumeUpCall).toBeDefined();
     expect(volumeDownCall).toBeDefined();
+    expect(pageUpCall).toBeDefined();
+    expect(pageDownCall).toBeDefined();
 
     // Trigger VolumeUp callback
     volumeUpCall[1]();
@@ -464,6 +472,15 @@ describe('useChapter', () => {
     );
     expect(mockInjectJavaScript).toHaveBeenCalledWith(
       expect.stringContaining('window.scrollBy'),
+    );
+
+    pageUpCall[1]();
+    expect(mockInjectJavaScript).toHaveBeenLastCalledWith(
+      expect.stringContaining('top: -100'),
+    );
+    pageDownCall[1]();
+    expect(mockInjectJavaScript).toHaveBeenLastCalledWith(
+      expect.stringContaining('top: 100'),
     );
 
     // Trigger VolumeDown callback
@@ -511,6 +528,12 @@ describe('useChapter', () => {
     const volumeDownCall = (
       NativeVolumeButtonListener.addListener as jest.Mock
     ).mock.calls.find(([event]) => event === 'VolumeDown');
+    const pageUpCall = (
+      NativeVolumeButtonListener.addListener as jest.Mock
+    ).mock.calls.find(([event]) => event === 'PageUp');
+    const pageDownCall = (
+      NativeVolumeButtonListener.addListener as jest.Mock
+    ).mock.calls.find(([event]) => event === 'PageDown');
 
     expect(volumeUpCall).toBeDefined();
     expect(volumeDownCall).toBeDefined();
@@ -529,6 +552,59 @@ describe('useChapter', () => {
       expect.stringContaining(
         'window.pageReader.movePage((window.pageReader.page?.val ?? 0) - 1)',
       ),
+    );
+
+    pageUpCall[1]();
+    expect(mockInjectJavaScript).toHaveBeenLastCalledWith(
+      expect.stringContaining(
+        'window.pageReader.movePage((window.pageReader.page?.val ?? 0) - 1)',
+      ),
+    );
+    pageDownCall[1]();
+    expect(mockInjectJavaScript).toHaveBeenLastCalledWith(
+      expect.stringContaining(
+        'window.pageReader.movePage((window.pageReader.page?.val ?? 0) + 1)',
+      ),
+    );
+  });
+
+  it('activates hardware page-turn keys only while the reader uses them', async () => {
+    const store = createStore();
+    const injectJavaScript = jest.fn();
+    mockUseNovelActions.mockReturnValue(store.state);
+    mockUseChapterGeneralSettings.mockReturnValue({
+      autoScroll: false,
+      autoScrollInterval: 1,
+      autoScrollOffset: 100,
+      useVolumeButtons: true,
+      volumeButtonsOffset: null,
+      pageReader: false,
+      pageReaderInvertVolumeButtons: false,
+      pageReaderDisableAnimation: false,
+    });
+
+    const { result, unmount } = renderHook(() =>
+      useChapter(
+        { current: { injectJavaScript } as any },
+        initialChapter,
+        novel,
+      ),
+    );
+    await waitFor(() =>
+      expect(result.current.chapterContext.loading).toBe(false),
+    );
+
+    expect(NativeVolumeButtonListener.setActive).toHaveBeenCalledWith(true);
+    const pageDownCall = (
+      NativeVolumeButtonListener.addListener as jest.Mock
+    ).mock.calls.find(([event]) => event === 'PageDown');
+    pageDownCall[1]();
+    expect(injectJavaScript).toHaveBeenCalledWith(
+      expect.stringContaining('Math.round(window.innerHeight * 0.75)'),
+    );
+    unmount();
+    expect(NativeVolumeButtonListener.setActive).toHaveBeenLastCalledWith(
+      false,
     );
   });
 });

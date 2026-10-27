@@ -5,6 +5,6 @@ public class NativeVolumeButtonListenerModule: Module {
   public func definition() -> ModuleDefinition {
     Name("NativeVolumeButtonListener")
 
-    Events("VolumeUp", "VolumeDown")
+    Events("VolumeUp", "VolumeDown", "PageUp", "PageDown")
   }
 }

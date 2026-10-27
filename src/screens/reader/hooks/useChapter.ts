@@ -121,38 +121,39 @@ export default function useChapter(
     hiddenRef.current = hidden;
   }, [hidden]);
 
-  const volumeButtonOffset = defaultTo(
-    volumeButtonsOffset,
-    Math.round(Dimensions.get('window').height * 0.75),
-  );
-
   const volumeUpDelta = pageReaderInvertVolumeButtons ? 1 : -1;
   const volumeDownDelta = pageReaderInvertVolumeButtons ? -1 : 1;
 
-  useEventListener(NativeVolumeButtonListener, 'VolumeUp', () => {
+  const turnPage = (pageDelta: number, scrollDirection: number) => {
+    const scrollDistance =
+      volumeButtonsOffset == null
+        ? 'Math.round(window.innerHeight * 0.75)'
+        : String(volumeButtonsOffset);
     webViewRef.current?.injectJavaScript(`(()=>{
       const isPaged = ${Boolean(pageReader)};
       if (isPaged && window.pageReader) {
         window.pageReader.movePage((window.pageReader.page?.val ?? 0) ${
-          volumeUpDelta >= 0 ? '+' : '-'
+          pageDelta >= 0 ? '+' : '-'
         } 1);
       } else {
-        window.scrollBy({top: -${volumeButtonOffset}, behavior: window.reader?.scrollBehavior?.() ?? 'smooth'});
+        window.scrollBy({top: ${
+          scrollDirection < 0 ? '-' : ''
+        }${scrollDistance}, behavior: window.reader?.scrollBehavior?.() ?? 'smooth'});
       }
     })()`);
-  });
+  };
 
+  useEventListener(NativeVolumeButtonListener, 'VolumeUp', () => {
+    turnPage(volumeUpDelta, -1);
+  });
   useEventListener(NativeVolumeButtonListener, 'VolumeDown', () => {
-    webViewRef.current?.injectJavaScript(`(()=>{
-      const isPaged = ${Boolean(pageReader)};
-      if (isPaged && window.pageReader) {
-        window.pageReader.movePage((window.pageReader.page?.val ?? 0) ${
-          volumeDownDelta >= 0 ? '+' : '-'
-        } 1);
-      } else {
-        window.scrollBy({top: ${volumeButtonOffset}, behavior: window.reader?.scrollBehavior?.() ?? 'smooth'});
-      }
-    })()`);
+    turnPage(volumeDownDelta, 1);
+  });
+  useEventListener(NativeVolumeButtonListener, 'PageUp', () => {
+    turnPage(-1, -1);
+  });
+  useEventListener(NativeVolumeButtonListener, 'PageDown', () => {
+    turnPage(1, 1);
   });
 
   useEffect(() => {
