@@ -568,8 +568,8 @@ export interface StringMap {
   'readerScreen.bottomSheet.pageReaderDescription': 'string';
   'readerScreen.bottomSheet.invertVolumeButtons': 'string';
   'readerScreen.bottomSheet.invertVolumeButtonsDescription': 'string';
-  'readerScreen.bottomSheet.disablePageTransitions': 'string';
-  'readerScreen.bottomSheet.disablePageTransitionsDescription': 'string';
+  'readerScreen.bottomSheet.disableReaderAnimations': 'string';
+  'readerScreen.bottomSheet.disableReaderAnimationsDescription': 'string';
   'readerScreen.bottomSheet.removeExtraSpacing': 'string';
   'readerScreen.bottomSheet.removeExtraSpacingDescription': 'string';
   'readerScreen.bottomSheet.scrollAmount': 'string';
