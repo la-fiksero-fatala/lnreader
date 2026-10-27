@@ -363,6 +363,8 @@ export interface StringMap {
   'generalSettingsScreen.desc': 'string';
   'generalSettingsScreen.disableLoadingAnimations': 'string';
   'generalSettingsScreen.disableLoadingAnimationsDesc': 'string';
+  'generalSettingsScreen.reduceAppAnimations': 'string';
+  'generalSettingsScreen.reduceAppAnimationsDesc': 'string';
   'generalSettingsScreen.disableHapticFeedback': 'string';
   'generalSettingsScreen.disableHapticFeedbackDescription': 'string';
   'generalSettingsScreen.chapterDownloadCooldown': 'string';
