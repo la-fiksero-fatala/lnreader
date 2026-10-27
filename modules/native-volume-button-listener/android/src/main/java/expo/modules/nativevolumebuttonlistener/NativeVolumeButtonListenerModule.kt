@@ -10,7 +10,7 @@ class NativeVolumeButtonListenerModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("NativeVolumeButtonListener")
 
-    Events("VolumeUp", "VolumeDown")
+    Events("VolumeUp", "VolumeDown", "PageUp", "PageDown")
 
     Function("setActive") { active: Boolean ->
       isActive = active
@@ -53,6 +53,8 @@ class NativeVolumeButtonListenerModule : Module() {
           val eventName = when (event.keyCode) {
             KeyEvent.KEYCODE_VOLUME_UP -> "VolumeUp"
             KeyEvent.KEYCODE_VOLUME_DOWN -> "VolumeDown"
+            KeyEvent.KEYCODE_PAGE_UP -> "PageUp"
+            KeyEvent.KEYCODE_PAGE_DOWN -> "PageDown"
             else -> null
           }
           if (isActive && eventName != null) {
