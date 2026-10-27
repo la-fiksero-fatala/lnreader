@@ -793,6 +793,7 @@
   "onboardingScreen": {
     "welcome": "Welcome",
     "pickATheme": "Pick a theme",
+    "ePaperOptimizationsDescription": "Black-and-white pages, paged reading, page buttons, reduced motion, and no auto-scroll.",
     "light": "Light",
     "dark": "Dark",
     "system": "System",

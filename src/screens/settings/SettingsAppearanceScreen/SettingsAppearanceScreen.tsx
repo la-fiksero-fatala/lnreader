@@ -8,12 +8,8 @@ import ColorPickerModal from '@components/ColorPickerModal/ColorPickerModal';
 import LanguagePickerModal from './LanguagePickerModal';
 import DateFormatModal from './DateFormatModal';
 
-import {
-  useAppSettings,
-  useChapterGeneralSettings,
-  useChapterReaderSettings,
-  useTheme,
-} from '@hooks/persisted';
+import { useAppSettings, useTheme } from '@hooks/persisted';
+import { useEPaperOptimizations } from '@hooks/persisted/useEPaperOptimizations';
 import {
   useMMKVBoolean,
   useMMKVNumber,
@@ -35,9 +31,6 @@ import { formatDate, getDateFormatLabel } from '@utils/dateFormat';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
-const restoreIfUnchanged = <T,>(current: T, preset: T, previous: T): T =>
-  current === preset ? previous : current;
-
 const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
   const theme = useTheme();
   const [, setThemeId] = useMMKVNumber('APP_THEME_ID');
@@ -55,16 +48,15 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
     showLabelsInNav,
     hideBackdrop,
     useFabForContinueReading,
-    disableLoadingAnimations = false,
-    reduceAppAnimations = false,
-    ePaperOptimizations = false,
-    ePaperPreviousSettings,
     dateFormat = 'default',
     relativeTimestamps = true,
     setAppSettings,
   } = useAppSettings();
-  const readerGeneral = useChapterGeneralSettings();
-  const readerTheme = useChapterReaderSettings();
+  const {
+    ePaperOptimizations,
+    applyEPaperOptimizations,
+    disableEPaperOptimizations,
+  } = useEPaperOptimizations();
 
   const colorScheme = Appearance.getColorScheme() ?? 'light';
   const actualThemeMode: Exclude<ThemeMode, 'system'> =
@@ -172,95 +164,6 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
 
   const handleModeChange = (mode: ThemeMode) => {
     setThemeMode(mode);
-  };
-
-  const applyEPaperOptimizations = () => {
-    if (ePaperOptimizations) return;
-
-    setAppSettings({
-      ePaperOptimizations: true,
-      disableLoadingAnimations: true,
-      reduceAppAnimations: true,
-      ePaperPreviousSettings: {
-        disableLoadingAnimations,
-        reduceAppAnimations,
-        readerTheme: {
-          backgroundColor: readerTheme.theme,
-          textColor: readerTheme.textColor,
-        },
-        readerGeneral: {
-          pageReader: readerGeneral.pageReader,
-          useVolumeButtons: readerGeneral.useVolumeButtons,
-          pageReaderDisableAnimation: readerGeneral.pageReaderDisableAnimation,
-          autoScroll: readerGeneral.autoScroll,
-        },
-      },
-    });
-    readerTheme.setChapterReaderSettings({
-      theme: '#FFFFFF',
-      textColor: '#000000',
-    });
-    readerGeneral.setChapterGeneralSettings({
-      pageReader: true,
-      useVolumeButtons: true,
-      pageReaderDisableAnimation: true,
-      autoScroll: false,
-    });
-  };
-
-  const disableEPaperOptimizations = () => {
-    const previous = ePaperPreviousSettings;
-    setAppSettings({
-      ePaperOptimizations: false,
-      ePaperPreviousSettings: undefined,
-      disableLoadingAnimations: previous
-        ? restoreIfUnchanged(
-            disableLoadingAnimations,
-            true,
-            previous.disableLoadingAnimations,
-          )
-        : disableLoadingAnimations,
-      reduceAppAnimations: previous
-        ? restoreIfUnchanged(
-            reduceAppAnimations,
-            true,
-            previous.reduceAppAnimations,
-          )
-        : reduceAppAnimations,
-    });
-    if (!previous) return;
-
-    readerGeneral.setChapterGeneralSettings({
-      pageReader: restoreIfUnchanged(
-        readerGeneral.pageReader,
-        true,
-        previous.readerGeneral.pageReader,
-      ),
-      useVolumeButtons: restoreIfUnchanged(
-        readerGeneral.useVolumeButtons,
-        true,
-        previous.readerGeneral.useVolumeButtons,
-      ),
-      pageReaderDisableAnimation: restoreIfUnchanged(
-        readerGeneral.pageReaderDisableAnimation,
-        true,
-        previous.readerGeneral.pageReaderDisableAnimation,
-      ),
-      autoScroll: restoreIfUnchanged(
-        readerGeneral.autoScroll,
-        false,
-        previous.readerGeneral.autoScroll,
-      ),
-    });
-    if (
-      readerTheme.theme === '#FFFFFF' &&
-      readerTheme.textColor === '#000000'
-    ) {
-      readerTheme.setChapterReaderSettings({
-        theme: previous.readerTheme.backgroundColor,
-        textColor: previous.readerTheme.textColor,
-      });
-    }
   };
 
   const selectTheme = (selectedTheme: ThemeColors) => {

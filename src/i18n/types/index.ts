@@ -676,6 +676,7 @@ export interface StringMap {
   'updatesScreen.updatingLibrary': 'string';
   'onboardingScreen.welcome': 'string';
   'onboardingScreen.pickATheme': 'string';
+  'onboardingScreen.ePaperOptimizationsDescription': 'string';
   'onboardingScreen.light': 'string';
   'onboardingScreen.dark': 'string';
   'onboardingScreen.system': 'string';
