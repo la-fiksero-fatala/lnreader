@@ -79,6 +79,7 @@ export interface StringMap {
   'appearanceScreen.theme.yotsuba': 'string';
   'appearanceScreen.theme.catppuccin': 'string';
   'appearanceScreen.theme.yinyang': 'string';
+  'appearanceScreen.theme.ePaperDisplay': 'string';
   'backupScreen.automaticBackupFrequency': 'string';
   'backupScreen.automaticBackupDescription': 'string';
   'backupScreen.automaticBackupOff': 'string';
