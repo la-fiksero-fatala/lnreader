@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View, Appearance } from 'react-native';
+import { ScrollView, StyleSheet, View, Appearance, Alert } from 'react-native';
 
 import { ThemePicker } from '@components/ThemePicker/ThemePicker';
 import type { SegmentedControlOption } from '@components/SegmentedControl';
@@ -8,7 +8,12 @@ import ColorPickerModal from '@components/ColorPickerModal/ColorPickerModal';
 import LanguagePickerModal from './LanguagePickerModal';
 import DateFormatModal from './DateFormatModal';
 
-import { useAppSettings, useTheme } from '@hooks/persisted';
+import {
+  useAppSettings,
+  useChapterGeneralSettings,
+  useChapterReaderSettings,
+  useTheme,
+} from '@hooks/persisted';
 import {
   useMMKVBoolean,
   useMMKVNumber,
@@ -17,7 +22,7 @@ import {
 import { Appbar, List, SafeAreaView, SegmentedControl } from '@components';
 import { AppearanceSettingsScreenProps } from '@navigators/types';
 import { getString } from '@i18n/translations';
-import { darkThemes, lightThemes } from '@theme/md3';
+import { darkThemes, lightThemes, E_PAPER_THEME_ID } from '@theme/md3';
 import {
   DYNAMIC_THEME_ID,
   getSystemDynamicTheme,
@@ -29,6 +34,9 @@ import Color from 'color';
 import { formatDate, getDateFormatLabel } from '@utils/dateFormat';
 
 type ThemeMode = 'light' | 'dark' | 'system';
+
+const restoreIfUnchanged = <T,>(current: T, preset: T, previous: T): T =>
+  current === preset ? previous : current;
 
 const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
   const theme = useTheme();
@@ -47,10 +55,16 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
     showLabelsInNav,
     hideBackdrop,
     useFabForContinueReading,
+    disableLoadingAnimations = false,
+    reduceAppAnimations = false,
+    ePaperOptimizations = false,
+    ePaperPreviousSettings,
     dateFormat = 'default',
     relativeTimestamps = true,
     setAppSettings,
   } = useAppSettings();
+  const readerGeneral = useChapterGeneralSettings();
+  const readerTheme = useChapterReaderSettings();
 
   const colorScheme = Appearance.getColorScheme() ?? 'light';
   const actualThemeMode: Exclude<ThemeMode, 'system'> =
@@ -61,8 +75,12 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
       : colorScheme;
   const availableThemes = useMemo(() => {
     const themes = actualThemeMode === 'light' ? lightThemes : darkThemes;
+    const ePaperTheme = themes.find(item => item.id === E_PAPER_THEME_ID);
+    const featuredThemes = ePaperTheme
+      ? [ePaperTheme, ...themes.filter(item => item !== ePaperTheme)]
+      : themes;
     if (!isDynamicThemeAvailable) {
-      return themes;
+      return featuredThemes;
     }
 
     const dynamicTheme =
@@ -72,7 +90,7 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
             getSystemDynamicTheme(),
             actualThemeMode === 'dark',
           );
-    return [dynamicTheme, ...themes];
+    return [dynamicTheme, ...featuredThemes];
   }, [actualThemeMode, theme]);
 
   /**
@@ -160,9 +178,141 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
     setThemeMode(mode);
   };
 
-  const handleThemeSelect = (selectedTheme: ThemeColors) => {
+  const applyEPaperOptimizations = () => {
+    if (ePaperOptimizations) return;
+
+    setAppSettings({
+      ePaperOptimizations: true,
+      disableLoadingAnimations: true,
+      reduceAppAnimations: true,
+      ePaperPreviousSettings: {
+        disableLoadingAnimations,
+        reduceAppAnimations,
+        readerTheme: {
+          backgroundColor: readerTheme.theme,
+          textColor: readerTheme.textColor,
+        },
+        readerGeneral: {
+          pageReader: readerGeneral.pageReader,
+          useVolumeButtons: readerGeneral.useVolumeButtons,
+          pageReaderDisableAnimation: readerGeneral.pageReaderDisableAnimation,
+          autoScroll: readerGeneral.autoScroll,
+        },
+      },
+    });
+    readerTheme.setChapterReaderSettings({
+      theme: '#FFFFFF',
+      textColor: '#000000',
+    });
+    readerGeneral.setChapterGeneralSettings({
+      pageReader: true,
+      useVolumeButtons: true,
+      pageReaderDisableAnimation: true,
+      autoScroll: false,
+    });
+  };
+
+  const disableEPaperOptimizations = () => {
+    const previous = ePaperPreviousSettings;
+    setAppSettings({
+      ePaperOptimizations: false,
+      ePaperPreviousSettings: undefined,
+      disableLoadingAnimations: previous
+        ? restoreIfUnchanged(
+            disableLoadingAnimations,
+            true,
+            previous.disableLoadingAnimations,
+          )
+        : disableLoadingAnimations,
+      reduceAppAnimations: previous
+        ? restoreIfUnchanged(
+            reduceAppAnimations,
+            true,
+            previous.reduceAppAnimations,
+          )
+        : reduceAppAnimations,
+    });
+    if (!previous) return;
+
+    readerGeneral.setChapterGeneralSettings({
+      pageReader: restoreIfUnchanged(
+        readerGeneral.pageReader,
+        true,
+        previous.readerGeneral.pageReader,
+      ),
+      useVolumeButtons: restoreIfUnchanged(
+        readerGeneral.useVolumeButtons,
+        true,
+        previous.readerGeneral.useVolumeButtons,
+      ),
+      pageReaderDisableAnimation: restoreIfUnchanged(
+        readerGeneral.pageReaderDisableAnimation,
+        true,
+        previous.readerGeneral.pageReaderDisableAnimation,
+      ),
+      autoScroll: restoreIfUnchanged(
+        readerGeneral.autoScroll,
+        false,
+        previous.readerGeneral.autoScroll,
+      ),
+    });
+    if (
+      readerTheme.theme === '#FFFFFF' &&
+      readerTheme.textColor === '#000000'
+    ) {
+      readerTheme.setChapterReaderSettings({
+        theme: previous.readerTheme.backgroundColor,
+        textColor: previous.readerTheme.textColor,
+      });
+    }
+  };
+
+  const selectTheme = (selectedTheme: ThemeColors) => {
     setThemeId(selectedTheme.id);
     setCustomAccentColor(undefined);
+  };
+
+  const handleThemeSelect = (selectedTheme: ThemeColors) => {
+    if (selectedTheme.id === E_PAPER_THEME_ID) {
+      selectTheme(selectedTheme);
+      if (!ePaperOptimizations) {
+        Alert.alert(
+          getString('appearanceScreen.ePaperApplyTitle'),
+          getString('appearanceScreen.ePaperApplyDescription'),
+          [
+            { text: getString('appearanceScreen.ePaperThemeOnly') },
+            {
+              text: getString('appearanceScreen.ePaperApply'),
+              onPress: applyEPaperOptimizations,
+            },
+          ],
+        );
+      }
+      return;
+    }
+
+    if (theme.id === E_PAPER_THEME_ID && ePaperOptimizations) {
+      Alert.alert(
+        getString('appearanceScreen.ePaperLeaveTitle'),
+        getString('appearanceScreen.ePaperLeaveDescription'),
+        [
+          {
+            text: getString('appearanceScreen.ePaperKeep'),
+            onPress: () => selectTheme(selectedTheme),
+          },
+          {
+            text: getString('appearanceScreen.ePaperRestore'),
+            onPress: () => {
+              disableEPaperOptimizations();
+              selectTheme(selectedTheme);
+            },
+          },
+        ],
+      );
+      return;
+    }
+
+    selectTheme(selectedTheme);
   };
 
   return (
@@ -208,6 +358,19 @@ const AppearanceSettings = ({ navigation }: AppearanceSettingsScreenProps) => {
               ))}
             </ScrollView>
           </View>
+          <SettingSwitch
+            label={getString('appearanceScreen.ePaperOptimizations')}
+            description={getString(
+              'appearanceScreen.ePaperOptimizationsDescription',
+            )}
+            value={ePaperOptimizations}
+            onPress={
+              ePaperOptimizations
+                ? disableEPaperOptimizations
+                : applyEPaperOptimizations
+            }
+            theme={theme}
+          />
           {theme.isDark ? (
             <SettingSwitch
               label={getString('appearanceScreen.pureBlackDarkMode')}

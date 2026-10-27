@@ -51,6 +51,16 @@ export interface StringMap {
   'appearanceScreen.languagePickerModal.restartNote': 'string';
   'appearanceScreen.appLanguageDefault': 'string';
   'appearanceScreen.appTheme': 'string';
+  'appearanceScreen.ePaperOptimizations': 'string';
+  'appearanceScreen.ePaperOptimizationsDescription': 'string';
+  'appearanceScreen.ePaperApplyTitle': 'string';
+  'appearanceScreen.ePaperApplyDescription': 'string';
+  'appearanceScreen.ePaperThemeOnly': 'string';
+  'appearanceScreen.ePaperApply': 'string';
+  'appearanceScreen.ePaperLeaveTitle': 'string';
+  'appearanceScreen.ePaperLeaveDescription': 'string';
+  'appearanceScreen.ePaperKeep': 'string';
+  'appearanceScreen.ePaperRestore': 'string';
   'appearanceScreen.darkTheme': 'string';
   'appearanceScreen.dateFormat': 'string';
   'appearanceScreen.dateFormatDefault': 'string';
@@ -79,6 +89,7 @@ export interface StringMap {
   'appearanceScreen.theme.yotsuba': 'string';
   'appearanceScreen.theme.catppuccin': 'string';
   'appearanceScreen.theme.yinyang': 'string';
+  'appearanceScreen.theme.ePaperDisplay': 'string';
   'backupScreen.automaticBackupFrequency': 'string';
   'backupScreen.automaticBackupDescription': 'string';
   'backupScreen.automaticBackupOff': 'string';
@@ -363,6 +374,8 @@ export interface StringMap {
   'generalSettingsScreen.desc': 'string';
   'generalSettingsScreen.disableLoadingAnimations': 'string';
   'generalSettingsScreen.disableLoadingAnimationsDesc': 'string';
+  'generalSettingsScreen.reduceAppAnimations': 'string';
+  'generalSettingsScreen.reduceAppAnimationsDesc': 'string';
   'generalSettingsScreen.disableHapticFeedback': 'string';
   'generalSettingsScreen.disableHapticFeedbackDescription': 'string';
   'generalSettingsScreen.chapterDownloadCooldown': 'string';
@@ -612,6 +625,8 @@ export interface StringMap {
   'readerSettings.deleteCustomTheme': 'string';
   'readerSettings.jsHint': 'string';
   'readerSettings.navigationControls': 'string';
+  'readerSettings.quickControls': 'string';
+  'readerSettings.moreReaderOptions': 'string';
   'readerSettings.notSaved': 'string';
   'readerSettings.openCSSFile': 'string';
   'readerSettings.openJSFile': 'string';
@@ -619,6 +634,7 @@ export interface StringMap {
   'readerSettings.readingMode': 'string';
   'readerSettings.readerTheme': 'string';
   'readerSettings.saveCustomTheme': 'string';
+  'readerSettings.customColors': 'string';
   'readerSettings.textColor': 'string';
   'readerSettings.textColorModal': 'string';
   'readerSettings.title': 'string';

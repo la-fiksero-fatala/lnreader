@@ -110,6 +110,24 @@ const displayPreferences: GeneralPreference[] = [
   { key: 'keepScreenOn', label: 'keepScreenOn' },
 ];
 
+const quickPreferences: GeneralPreference[] = [
+  {
+    key: 'useVolumeButtons',
+    label: 'volumeButtonsScroll',
+    description: 'volumeButtonsScrollDescription',
+  },
+  {
+    key: 'pageReader',
+    label: 'pageReader',
+    description: 'pageReaderDescription',
+  },
+  {
+    key: 'pageReaderDisableAnimation',
+    label: 'disableReaderAnimations',
+    description: 'disableReaderAnimationsDescription',
+  },
+];
+
 const navigationPreferences: GeneralPreference[] = [
   {
     key: 'autoScroll',
@@ -122,24 +140,9 @@ const navigationPreferences: GeneralPreference[] = [
     description: 'swipeGesturesDescription',
   },
   {
-    key: 'useVolumeButtons',
-    label: 'volumeButtonsScroll',
-    description: 'volumeButtonsScrollDescription',
-  },
-  {
-    key: 'pageReader',
-    label: 'pageReader',
-    description: 'pageReaderDescription',
-  },
-  {
     key: 'tapToScroll',
     label: 'tapToScroll',
     description: 'tapToScrollDescription',
-  },
-  {
-    key: 'pageReaderDisableAnimation',
-    label: 'disableReaderAnimations',
-    description: 'disableReaderAnimationsDescription',
   },
 ];
 
@@ -153,6 +156,7 @@ const pagedModePreferences: GeneralPreference[] = [
 
 const GeneralTab: React.FC = React.memo(() => {
   const theme = useTheme();
+  const [showMoreOptions, setShowMoreOptions] = useState(false);
   const { setChapterGeneralSettings, ...settings } =
     useChapterGeneralSettings();
 
@@ -189,24 +193,30 @@ const GeneralTab: React.FC = React.memo(() => {
   return (
     <BottomSheetScrollView>
       <List.SubHeader theme={theme}>
-        {getString('readerScreen.bottomSheet.display')}
+        {getString('readerSettings.quickControls')}
       </List.SubHeader>
-      {displayPreferences.map(renderPreference)}
-      <List.SubHeader theme={theme}>
-        {getString('readerScreen.bottomSheet.navigation')}
-      </List.SubHeader>
-      {navigationPreferences.map(item => {
-        if (item.key === 'pageReader') {
-          return (
-            <React.Fragment key={item.key}>
-              {renderPreference(item)}
-              {settings.pageReader &&
-                pagedModePreferences.map(renderPreference)}
-            </React.Fragment>
-          );
-        }
-        return renderPreference(item);
-      })}
+      {quickPreferences.map(renderPreference)}
+      {settings.pageReader &&
+        settings.useVolumeButtons &&
+        pagedModePreferences.map(renderPreference)}
+      <List.Item
+        title={getString('readerSettings.moreReaderOptions')}
+        right={showMoreOptions ? 'chevron-up' : 'chevron-down'}
+        onPress={() => setShowMoreOptions(!showMoreOptions)}
+        theme={theme}
+      />
+      {showMoreOptions && (
+        <>
+          <List.SubHeader theme={theme}>
+            {getString('readerScreen.bottomSheet.display')}
+          </List.SubHeader>
+          {displayPreferences.map(renderPreference)}
+          <List.SubHeader theme={theme}>
+            {getString('readerScreen.bottomSheet.navigation')}
+          </List.SubHeader>
+          {navigationPreferences.map(renderPreference)}
+        </>
+      )}
     </BottomSheetScrollView>
   );
 });

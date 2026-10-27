@@ -216,7 +216,9 @@ const SettingsWebView = () => {
   const webViewSource = useMemo(
     () => ({
       html: `
-            <html >
+            <html class="${
+              generalSettings.pageReaderDisableAnimation ? 'no-animation' : ''
+            }">
               <head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
                 ${webViewCSS}
@@ -238,7 +240,9 @@ const SettingsWebView = () => {
                   })}
                 </script>
               </head>
-              <body class="${generalSettings.pageReader ? 'page-reader' : ''}">
+              <body class="${generalSettings.pageReader ? 'page-reader' : ''} ${
+        generalSettings.pageReaderDisableAnimation ? 'no-animation' : ''
+      }">
                             <div class="transition-chapter" style="transform: translateX(0%);
                             ${
                               generalSettings.pageReader ? '' : 'display: none'
@@ -309,6 +313,7 @@ const SettingsWebView = () => {
       generalSettings.verticalSeekbar,
       generalSettings.bionicReading,
       generalSettings.pageReader,
+      generalSettings.pageReaderDisableAnimation,
       batteryLevel,
       preparedDummyHTML,
       settings,

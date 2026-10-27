@@ -38,9 +38,6 @@ const ThemeTab: React.FC = () => {
         contentContainerStyle={styles.contentContainer}
       >
         <View style={styles.section}>
-          <List.SubHeader theme={theme}>
-            {getString('readerSettings.preset')}
-          </List.SubHeader>
           <ReaderThemeSelector
             label={getString('readerSettings.preset')}
             labelStyle={labelStyle}
@@ -48,7 +45,9 @@ const ThemeTab: React.FC = () => {
         </View>
 
         <View style={styles.section}>
-          <List.SubHeader theme={theme}>Custom Colors</List.SubHeader>
+          <List.SubHeader theme={theme}>
+            {getString('readerSettings.customColors')}
+          </List.SubHeader>
           <ColorPreferenceItem
             label={getString('readerSettings.backgroundColor')}
             description={readerSettings.theme}

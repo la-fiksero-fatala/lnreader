@@ -54,6 +54,16 @@
     },
     "appLanguageDefault": "Default",
     "appTheme": "App theme",
+    "ePaperOptimizations": "E-paper optimizations",
+    "ePaperOptimizationsDescription": "Black-and-white reader, paged reading, page-turn buttons, and no animations",
+    "ePaperApplyTitle": "Also apply E-paper optimizations?",
+    "ePaperApplyDescription": "Use white pages with black text, turn on paged reading and page-turn buttons, turn off auto-scroll, and stop reader, loading, and interface animations. Your current settings will be saved.",
+    "ePaperThemeOnly": "Theme only",
+    "ePaperApply": "Apply optimizations",
+    "ePaperLeaveTitle": "Disable E-paper optimizations?",
+    "ePaperLeaveDescription": "The preset changed the reader to black and white, enabled paged reading and page-turn buttons, stopped auto-scroll, and disabled reader, loading, and interface animations. Keep these with the new theme, or restore your saved settings.",
+    "ePaperKeep": "Keep optimizations",
+    "ePaperRestore": "Disable and restore",
     "darkTheme": "Dark Theme",
     "dateFormat": "Date format",
     "dateFormatDefault": "Default (%{date})",
@@ -82,7 +92,8 @@
       "turquoise": "Turquoise",
       "yotsuba": "Yotsuba",
       "catppuccin": "Catppuccin",
-      "yinyang": "Yin & Yang"
+      "yinyang": "Yin & Yang",
+      "ePaperDisplay": "E-paper display"
     }
   },
   "backupScreen": {
@@ -420,6 +431,8 @@
     "desc": "(Descending)",
     "disableLoadingAnimations": "Disable loading animations",
     "disableLoadingAnimationsDesc": "May improve performance on slower devices",
+    "reduceAppAnimations": "Disable interface animations",
+    "reduceAppAnimationsDesc": "Stop screen transitions and motion in buttons, panels, and other controls",
     "disableHapticFeedback": "Disable haptic feedback",
     "disableHapticFeedbackDescription": "Turn off vibrations for touch interactions.",
     "chapterDownloadCooldown": "Chapter download cooldown",
@@ -669,7 +682,7 @@
       "pageReader": "Paged reading (Experimental)",
       "pageReaderDescription": "Split the chapter into pages instead of scrolling. Experimental — may break formatting in some novels",
       "invertVolumeButtons": "Invert volume buttons",
-      "invertVolumeButtonsDescription": "Swap volume up and down buttons for previous and next page",
+      "invertVolumeButtonsDescription": "Swap volume up and down directions in paged reading",
       "disableReaderAnimations": "Disable reader animations",
       "disableReaderAnimationsDescription": "Turn pages and scroll instantly without animation",
       "removeExtraSpacing": "Remove extra spacing",
@@ -690,8 +703,8 @@
       "verticalSeekbar": "Vertical seekbar",
       "verticalSeekbarDescription": "Show a slider on the side to jump to any point in the chapter",
       "keepScreenOn": "Keep screen on",
-      "volumeButtonsScroll": "Volume button scrolling",
-      "volumeButtonsScrollDescription": "Use the volume buttons to scroll instead of adjusting volume"
+      "volumeButtonsScroll": "Page-turn buttons",
+      "volumeButtonsScrollDescription": "Use volume or Page Up/Down keys to scroll or turn pages"
     },
     "drawer": {
       "scrollToBottom": "Scroll to bottom",
@@ -719,6 +732,8 @@
     "deleteCustomTheme": "Delete theme",
     "jsHint": "Available variables: html, novelName, chapterName, sourceId, chapterId, novelId",
     "navigationControls": "Navigation Controls",
+    "quickControls": "Quick controls",
+    "moreReaderOptions": "More reader options",
     "notSaved": "Not saved",
     "openCSSFile": "Import CSS file",
     "openJSFile": "Import JS file",
@@ -726,6 +741,7 @@
     "readingMode": "Reading Mode",
     "readerTheme": "Theme",
     "saveCustomTheme": "Save theme",
+    "customColors": "Custom colors",
     "textColor": "Text color",
     "textColorModal": "Text color",
     "title": "Reader",

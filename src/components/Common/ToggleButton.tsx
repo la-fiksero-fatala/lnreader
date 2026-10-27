@@ -74,12 +74,13 @@ export const ToggleColorButton: React.FC<ToggleColorButtonProps> = ({
 }) => (
   <Pressable
     accessibilityRole="radio"
+    accessibilityLabel={`${backgroundColor} / ${textColor}`}
     accessibilityState={{ checked: selected }}
     android_ripple={{ color: theme.rippleColor, foreground: true }}
     style={[
       styles.toggleColorButtonContainer,
       {
-        borderColor: selected ? theme.primary : 'transparent',
+        borderColor: selected ? theme.primary : theme.outlineVariant,
       },
     ]}
     onPress={onPress}
